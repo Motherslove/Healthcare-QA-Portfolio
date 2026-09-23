@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import sqlite3
 
 app = Flask(__name__)
@@ -94,7 +94,97 @@ def register_patient():
 
     return redirect("/")
 
+@app.route("/api/patients", methods=["GET"])
+def get_patients():
+    connection = get_db_connection()
 
+    patients = connection.execute("""
+        SELECT *
+        FROM patients
+        ORDER BY id ASC
+    """).fetchall()
+
+    connection.close()
+
+    patient_list = []
+
+    for patient in patients:
+        patient_list.append({
+            "id": patient["id"],
+            "first_name": patient["first_name"],
+            "last_name": patient["last_name"],
+            "date_of_birth": patient["date_of_birth"],
+            "phone": patient["phone"],
+            "email": patient["email"]
+        })
+
+    return jsonify(patient_list)
+@app.route("/api/patients/<int:patient_id>", methods=["GET"])
+def get_patient(patient_id):
+    connection = get_db_connection()
+
+    patient = connection.execute("""
+        SELECT *
+        FROM patients
+        WHERE id = ?
+    """, (patient_id,)).fetchone()
+
+    connection.close()
+
+    if patient is None:
+        return jsonify({"error": "Patient not found"}), 404
+
+    return jsonify({
+        "id": patient["id"],
+        "first_name": patient["first_name"],
+        "last_name": patient["last_name"],
+        "date_of_birth": patient["date_of_birth"],
+        "phone": patient["phone"],
+        "email": patient["email"]
+    })
+@app.route("/api/patients", methods=["POST"])
+def create_patient():
+    data = request.get_json()
+
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    date_of_birth = data.get("date_of_birth")
+    phone = data.get("phone")
+    email = data.get("email")
+
+    if not all([first_name, last_name, date_of_birth, phone, email]):
+        return jsonify({
+            "error": "All patient fields are required"
+        }), 400
+
+    connection = get_db_connection()
+
+    cursor = connection.execute("""
+        INSERT INTO patients
+        (first_name, last_name, date_of_birth, phone, email)
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        first_name,
+        last_name,
+        date_of_birth,
+        phone,
+        email
+    ))
+
+    connection.commit()
+
+    patient_id = cursor.lastrowid
+
+    connection.close()
+
+    return jsonify({
+        "id": patient_id,
+        "first_name": first_name,
+        "last_name": last_name,
+        "date_of_birth": date_of_birth,
+        "phone": phone,
+        "email": email
+    }), 201
 if __name__ == "__main__":
     initialize_database()
     app.run(debug=True)
