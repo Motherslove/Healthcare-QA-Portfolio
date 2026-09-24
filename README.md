@@ -1,224 +1,168 @@
-# Healthcare QA Portfolio Project
+Healthcare QA Portfolio
 
-## Project Overview
+A hands-on software quality assurance portfolio project demonstrating the full QA lifecycle across a Flask healthcare application: test planning, manual functional testing, defect reporting, regression testing, SQL/database validation, REST API testing with Postman, and API test automation with Pytest.
 
-This project is a healthcare patient management web application that I created to demonstrate both software development and Quality Assurance (QA) testing skills.
+Project Highlights
 
-I first built the application using Python, Flask, HTML, CSS, and SQLite. After the core functionality was working, I tested the application manually, documented test cases, identified defects, implemented fixes, retested the defects, and completed regression testing.
+Built and tested a patient management web application using Python, Flask, HTML/CSS, and SQLite.
 
-All patient information used in this project is synthetic test data.
+Created and executed 10 manual patient-search test cases.
 
-## Technologies Used
+Identified, documented, fixed, and retested search defects involving lowercase and full-name searches.
 
-- Python
-- Flask
-- SQLite
-- HTML
-- CSS
-- Visual Studio Code
-- Git
-- GitHub
+Completed regression testing with 10/10 tests passing.
 
-## Application Features
+Created and executed 10 SQL/database validation tests.
 
-The application currently supports:
+Created and executed 10 REST API tests in Postman covering positive and negative scenarios.
 
-- Patient registration
-- Patient record storage using SQLite
-- Patient record display
-- Search by Patient ID
-- Search by first name
-- Search by last name
-- Partial-name search
-- Case-insensitive search
-- Full-name search
+Added Pytest automation for core API workflows, including GET, POST, 404, and required-field validation.
 
-## How I Built the Application
+Used Git and GitHub for version control and portfolio documentation.
 
-I created the project in Visual Studio Code and used Python with Flask for the backend.
+Technologies & Tools
 
-SQLite was used as the database for storing patient records.
+Application: Python, Flask, HTML, CSS, SQLite
+QA / Testing: Manual Testing, Regression Testing, SQL, Postman, REST APIs, Pytest
+Workflow: Git, GitHub, Visual Studio, Chrome
 
-The frontend was created with HTML and CSS.
+Application Features
 
-The patient registration form collects:
+The application supports:
 
-- First name
-- Last name
-- Date of birth
-- Phone number
-- Email address
+Patient registration
 
-After registration, Flask processes the form data and stores the patient information in the SQLite database.
+SQLite patient storage
 
-I then added patient search functionality so records could be located using Patient ID or patient names.
+Patient record display
 
-## QA Testing Process
+Search by patient ID
 
-After building the application, I created manual test cases for the patient search functionality.
+Search by first or last name
 
-My testing process included:
+Partial and case-insensitive search
 
-1. Creating test scenarios and test cases.
-2. Defining test data and expected results.
-3. Executing the test cases manually.
-4. Comparing expected results with actual results.
-5. Identifying defects.
-6. Documenting defects in a bug report.
-7. Updating the application to resolve the defects.
-8. Retesting the fixes.
-9. Performing regression testing.
+Full-name search
 
-## Test Coverage
+REST API endpoints for retrieving and creating patient records
 
-I created 10 manual test cases covering:
+QA Workflow
 
-- Valid first-name search
-- Valid last-name search
-- Patient ID search
-- Nonexistent patient search
-- Partial-name search
-- Lowercase search
-- Empty/cleared search
-- Special-character input
-- Full-name search
-- Lowercase full-name search
+1. Manual Functional Testing
 
-The completed regression test cycle resulted in:
+Created structured test cases for patient-search functionality, including valid and invalid searches, partial names, lowercase input, empty searches, special characters, and full-name searches.
 
-**10 Passed / 10 Executed**
+Regression result: 10 executed, 10 passed, 0 failed.
 
-**Regression Status: PASS**
+2. Defect Reporting
 
-The detailed test cases are available in:
+Two search defects were identified during testing:
 
-`Test-Cases/Healthcare_Test_Cases.xlsx`
+BUG-001 - Lowercase Search
+Lowercase search text initially failed to return the expected patient. The SQL search logic was updated to perform case-insensitive comparisons, followed by successful retesting.
 
-## Defects Found
+BUG-002 - Full-Name Search
+Searching for a full name such as Jordan Smith initially returned no result even though first-name and last-name searches worked independently. The query was updated to support combined first- and last-name matching, followed by successful retesting.
 
-### BUG-001 — Case-Insensitive Patient Search
+3. SQL / Database Testing
 
-During testing, I discovered that searching for an existing patient using lowercase text did not return the patient.
+Created a 10-test SQL validation suite covering:
 
-Example:
+Patient retrieval
 
-Patient record:
+Search by patient ID
 
-`Jordan Smith`
+Search by first name
 
-Search:
+Full-name validation
 
-`jordan`
+NULL checks on required fields
 
-**Expected Result:**  
-Jordan Smith should appear regardless of capitalization.
+Duplicate patient ID checks
 
-**Actual Result:**  
-The patient was not returned.
+Record-count validation
 
-**Resolution:**  
-The SQL search logic was updated to perform case-insensitive comparisons.
+Case-insensitive search
 
-**Retest Result:** PASS
+Nonexistent-patient searches
 
----
+UI-to-database persistence validation
 
-### BUG-002 — Full-Name Patient Search
+Result: 10 executed, 10 passed, 0 failed.
 
-During additional testing, I discovered that searching by first name or last name worked individually, but searching by the patient's complete name did not.
+4. REST API Testing with Postman
 
-For example:
+Tested Flask API endpoints with positive and negative scenarios, including:
 
-`Jordan` → PASS
+GET /api/patients
 
-`Smith` → PASS
+GET /api/patients/<id>
 
-`Jordan Smith` → FAIL
+POST /api/patients
 
-**Expected Result:**  
-Jordan Smith should appear when the complete patient name is entered.
+200 OK
 
-**Actual Result:**  
-No matching patient appeared.
+201 Created
 
-**Root Cause:**  
-The search query checked the first and last name separately but did not search the combined full name.
+400 Bad Request
 
-**Resolution:**  
-The SQL query was updated to support combined first-name and last-name searches while maintaining case-insensitive searching.
+404 Not Found
 
-**Retest Result:** PASS
+JSON response validation
 
-The detailed defect documentation is available in:
+Missing and empty required fields
 
-`Bug-Reports/Bug_Report.xlsx`
+Malformed JSON
 
-## Regression Testing
+Persistence of newly created patients
 
-After fixing the identified defects, I reran the patient search test suite.
+Result: 10 executed, 10 passed, 0 failed.
 
-Regression testing confirmed that the fixes did not negatively affect the existing search functionality.
+5. Pytest Automation
 
-Final result:
+Automated core REST API checks using Flask's test client and Pytest. Automated coverage includes:
 
-**10 Test Cases Executed**  
-**10 Test Cases Passed**  
-**0 Test Cases Failed**
+GET all patients
 
-## QA Skills Demonstrated
+GET patient by ID
 
-This project demonstrates experience with:
+404 handling for nonexistent patients
 
-- Manual Testing
-- Functional Testing
-- Regression Testing
-- Test Case Design
-- Test Execution
-- Defect Identification
-- Bug Reporting
-- Severity and Priority Classification
-- Retesting
-- Negative Testing
-- Web Application Testing
-- SQL/Database Validation
-- Test Documentation
-- Git and GitHub
+POST patient creation
 
-## QA Defect Lifecycle Demonstrated
+Missing required-field validation
 
-Build Application  
-↓  
-Create Test Cases  
-↓  
-Execute Tests  
-↓  
-Identify Defects  
-↓  
-Document Bugs  
-↓  
-Implement Fixes  
-↓  
-Retest  
-↓  
-Regression Testing  
-↓  
-Document Results
+Empty required-field validation
 
-## Future Enhancements
+Repository Structure
 
-Future additions to this QA portfolio may include:
+Healthcare-QA-Portfolio/
+├── API-Testing/
+│   ├── API_Test_Cases.md
+│   └── Healthcare_QA_API_Tests.postman_collection.json
+├── Bug-Reports/
+│   └── Bug_Report.xlsx
+├── SQL/
+│   └── Database_Test_Queries.sql
+├── Test-Cases/
+│   └── Healthcare_Test_Cases.xlsx
+├── tests/
+│   └── test_api.py
+├── static/
+├── templates/
+├── app.py
+├── healthcare.db
+└── README.md
 
-- REST API testing with Postman
-- SQL database test queries
-- Automated testing with Pytest
-- UI automation with Playwright or Selenium
-- GitHub Actions for automated test execution
-- Appointment management
-- Medication management
-- Laboratory results
+Skills Demonstrated
 
-## Author
+Manual testing • Functional testing • Regression testing • Test case design • Defect lifecycle • Bug reporting • SQL validation • Database testing • REST API testing • Postman • Pytest • Test automation • JSON validation • HTTP status-code validation • Python • Flask • SQLite • Git • GitHub
 
-**Asha Johnson**
+Portfolio Value
 
-Healthcare QA Portfolio Project
+This project demonstrates an end-to-end QA workflow rather than isolated test artifacts: application behavior was tested at the UI, database, and API layers; defects were documented and retested; regression coverage was completed; and repeatable API checks were automated with Pytest.
+
+Author
+
+Asha Johnson
+GitHub: https://github.com/Motherslove
